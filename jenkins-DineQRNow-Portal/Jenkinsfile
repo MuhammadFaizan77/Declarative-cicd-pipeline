@@ -23,10 +23,10 @@ pipeline {
                     sh "docker tag react-app ${env.DOCKER_USER}/react-app:latest"
                     sh "docker login -u ${env.DOCKER_USER} -p ${env.DOCKER_PASS}"
                     sh "docker push ${env.DOCKER_USER}/react-app:latest"
+                } // Add this closing curly brace
 
                 
             }
         }
     }
-}
 }
