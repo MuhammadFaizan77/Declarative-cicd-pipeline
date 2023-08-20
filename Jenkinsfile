@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Clone git repo') {
             steps {
-                git url: "https://github.com/MuhammadFaizan77/devops-capstone-projects.git",branch:"main"
+                git url: "https://github.com/MuhammadFaizan77/Declarative-cicd-pipeline.git",branch:"main"
                 
             }
         }
