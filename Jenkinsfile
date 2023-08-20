@@ -10,7 +10,7 @@ pipeline {
         stage('build image') {
             steps {
                 echo "buidling image"
-                sh "docker build -f jenkins-DineQRNow-Portal/Dockerfile -t react-app ."
+                sh "docker build -t react-app ."
 
                 
             }
