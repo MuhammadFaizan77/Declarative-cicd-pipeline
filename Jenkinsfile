@@ -7,22 +7,6 @@ pipeline {
                 
             }
         }
-         stage('SonarQube analysis') {
-            steps {
-                withSonarQubeEnv('My SonarQube Server', credentialsId: 'sonarqube', envOnly: true) {
-                sh '''
-                sonar-scanner -Dsonar.login=$SONAR_AUTH_TOKEN \
-                -Dsonar.host.url=http://localhost:9000 \
-                -Dsonar.projectKey=react-app \
-                -Dsonar.projectName=react-app \
-                -Dsonar.projectVersion=1.0 \
-                -Dsonar.sources=src \
-                -Dsonar.exclusions=/*.doc,/.docx,**/.ipch,/node_modules/
-                '''
-        }
-    }
-}
-
         stage('build image') {
             steps {
                 echo "buidling image"
