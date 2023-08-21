@@ -13,19 +13,16 @@ pipeline {
                 sh "docker build -t react-app ."
             }
         }
-        stage('SonarQube analysis') {
+        stage('Static Code Analysis') {
+            environment {
+                SONAR_URL = "http://localhost:9000"
+            }
             steps {
-                // Run SonarQube scanner with sonarqube server configuration
-                withSonarQubeEnv('sonarqube') {
-                    // Specify the scanner parameters
-                    sh 'sonar-scanner \
-                        -Dsonar.projectKey=react-app \
-                        -Dsonar.sources=src \
-                        -Dsonar.tests=src \
-                        -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info'
+                withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
+                sh 'sonar-scanner -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
                 }
             }
-        }
+    }
         stage('Pushing Docker image') {
             steps {
                echo "Pushing the Image"
