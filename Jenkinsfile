@@ -13,16 +13,16 @@ pipeline {
                 sh "docker build -t react-app ."
             }
         }
-        stage('Static Code Analysis') {
-            environment {
-                SONAR_URL = "http://localhost:9000"
-            }
+       stage('Static Code Analysis') {
             steps {
-                withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
-                sh 'sonar-scanner -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
+                script {
+                    def scannerHome = tool name: 'SonarQubeScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+                    withSonarQubeEnv('SonarQube') {
+                        sh "${scannerHome}/bin/sonar-scanner"
+                    }
                 }
             }
-    }
+        }
         stage('Pushing Docker image') {
             steps {
                echo "Pushing the Image"
