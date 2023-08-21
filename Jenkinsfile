@@ -7,22 +7,23 @@ pipeline {
                 
             }
         }
+         stage('Static Code Analysis') {
+            environment {
+            SONAR_URL = "http://34.201.116.83:9000"
+        }
+            steps {
+                withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
+                sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
+                }
+            }
+            }
         stage('build image') {
             steps {
                 echo "buidling image"
                 sh "docker build -t react-app ."
             }
         }
-       stage('Static Code Analysis') {
-            steps {
-                script {
-                    def scannerHome = tool name: 'SonarQubeScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
-                    withSonarQubeEnv('SonarQube') {
-                        sh "${scannerHome}/bin/sonar-scanner"
-                    }
-                }
-            }
-        }
+       
         stage('Pushing Docker image') {
             steps {
                echo "Pushing the Image"
