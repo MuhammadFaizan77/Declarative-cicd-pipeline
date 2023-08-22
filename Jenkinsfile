@@ -7,14 +7,18 @@ pipeline {
                 
             }
         }
-        stage('SonarQube Analysis') {
-            step {
-            def scannerHome = tool 'SonarScanner';
-            withSonarQubeEnv() {
-                sh "${scannerHome}/bin/sonar-scanner"
+     stage('SonarQube Analysis') {
+        agent any // or agent none
+        steps {
+            script {
+                def scannerHome = tool 'SonarScanner'
+                withSonarQubeEnv() {
+                    sh "${scannerHome}/bin/sonar-scanner"
             }
+        }
     }
-  }
+}
+
         
         stage('build image') {
             steps {
