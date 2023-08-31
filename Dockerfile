@@ -23,6 +23,7 @@
 # Stage 1: Build environment
 FROM node:latest AS build
 WORKDIR /app
+COPY package.json package-lock.json ./
 RUN npm install
 COPY . ./
 RUN npm run build
